@@ -31,7 +31,7 @@ public class HeadClass {
         else {
             for (Annotation annotation : annotations) {
                 System.out.println(annotation.annotationType());
-            }
+            } //задание 72
         }
     }
 
