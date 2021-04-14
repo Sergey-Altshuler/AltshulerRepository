@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Random;
 
 public class Person implements Serializable {
-    private final String name;
-    private final String surname;
-    private final int age;
+    private String name;
+    private String surname;
+    private int age;
     private static final List<String> names = List.of("Andrey", "Sergey", "Matvey", "Egor", "Ilya", "Dmitriy");
     private static final List<String> surnames = List.of("Perepechko", "Alekseev", "Silvanovich", "Vetcher", "Kechko", "Lapanik", "Altshuler");
 
@@ -31,10 +31,8 @@ public class Person implements Serializable {
         return age;
     }
 
-    private Person(String name, String surname, int age) {
-        this.name = name;
-        this.surname = surname;
-        this.age = age;
+    private Person() {
+
     }
 
     @Override
@@ -46,7 +44,7 @@ public class Person implements Serializable {
         int nameIndex = new Random().nextInt(6);
         int surnameIndex = new Random().nextInt(7);
         int age = new Random().nextInt(16) + 15;
-        return new Person(names.get(nameIndex), surnames.get(surnameIndex), age);
+        return new Builder().name(names.get(nameIndex)).surname(surnames.get(surnameIndex)).age(age).build();
     }
 
 
@@ -63,5 +61,32 @@ public class Person implements Serializable {
     @Override
     public int hashCode() {
         return 1 + 31 * age + 21 * name.hashCode() + surname.hashCode();
+    }
+
+    public static class Builder {
+        private Person person;
+
+        public Builder() {
+            person = new Person();
+        }
+
+        public Builder name(String name) {
+            person.name = name;
+            return this;
+        }
+
+        public Builder surname(String surname) {
+            person.surname = surname;
+            return this;
+        }
+
+        public Builder age(int age) {
+            person.age = age;
+            return this;
+        }
+
+        public Person build() {
+            return person;
+        }
     }
 }
