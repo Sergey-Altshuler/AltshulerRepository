@@ -1,0 +1,28 @@
+create table people.person
+(
+    id             int     not null,
+    age            int     null,
+    salary         decimal null,
+    passport       char(10),
+    address        varchar(200),
+    dateOfBirthday date,
+    dateTimeCreate datetime,
+    timeToLunch    time,
+    letter         text
+);
+insert into people.person
+(id, age, salary, passport, address, dateOfBirthday, dateTimeCreate, timeToLunch, letter)
+VALUES (1, 19, 300, 'AB34595430', 'Skriganova-9', '2001-10-10', '2021-03-16', '00:23:12', 'Java Senior');
+insert into people.person
+(id, age, salary, passport, address, dateOfBirthday, dateTimeCreate, timeToLunch, letter)
+VALUES (2, 23, 400, 'AB34595650', 'Skriganova-9', '1997-08-25', '2020-02-18', '00:12:54', 'Tester');
+insert into people.person
+(id, age, salary, passport, address, dateOfBirthday, dateTimeCreate, timeToLunch, letter)
+VALUES (3, 26, 400, 'AB12395650', 'Skriganova-9', '1994-08-26', '2021-01-18', '00:02:54', 'Java Junior');
+insert into people.person
+(id, age, salary, passport, address, dateOfBirthday, dateTimeCreate, timeToLunch, letter)
+VALUES (4, 20, 500, 'AB34591111', 'Skriganova-9', '2000-08-27', '2020-11-17', '03:12:44', 'Java Middle');
+insert into people.person
+(id, age, salary, passport, address, dateOfBirthday, dateTimeCreate, timeToLunch, letter)
+VALUES (5, 43, 1000, 'AB34222250', 'Skriganova-9', '1977-12-15', '2019-05-01', '00:10:10', 'HR');
+SELECT * FROM people.person where age>21 order by timeToLunch;
