@@ -13,7 +13,7 @@ public class PeopleTableCreator implements TableCreatable {
         try {
             connection = DriverManager.getConnection(URL, userName, password);
             statement = connection.createStatement();
-            String SQL = "CREATE table if not exists PEOPLE (id int auto_increment, name varchar(25), surname varchar(25), age int, primary key (id))";
+            String SQL = "CREATE table if not exists PEOPLE (id int auto_increment, name varchar(25), surname varchar(25), age int, addressNum int, primary key (id), foreign key(addressNum) references ADDRESS(id) ON UPDATE CASCADE ON DELETE SET NULL)";
             statement.executeUpdate(SQL);
         } catch (SQLException e) {
             e.printStackTrace();
