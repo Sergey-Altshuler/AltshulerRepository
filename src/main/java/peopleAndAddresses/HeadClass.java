@@ -31,11 +31,11 @@ public class HeadClass {
             addressDao.save(new Address(3, "Kiseleva", 61));
             addressDao.save(new Address(4, "Krasnaya", 12));
             addressDao.save(new Address(5, "Gikalo", 3));
-            personDAO.save(new Person(1, "Sergey", "Altshuler", 27));
-            personDAO.save(new Person(2, "Dmitriy", "Perepechko", 24));
-            personDAO.save(new Person(3, "Egor", "Silvanovich", 20));
-            personDAO.save(new Person(4, "Matvey", "Vetcher", 29));
-            personDAO.save(new Person(5, "Mikhail", "Lapanik", 27));
+            personDAO.save(new Person(1, "Sergey", "Altshuler", 27, 2));
+            personDAO.save(new Person(2, "Dmitriy", "Perepechko", 24, 2));
+            personDAO.save(new Person(3, "Egor", "Silvanovich", 20, 4));
+            personDAO.save(new Person(4, "Matvey", "Vetcher", 29, 4));
+            personDAO.save(new Person(5, "Mikhail", "Lapanik", 27, 3));
         } catch (SQLException e) {
             e.printStackTrace();
         }
