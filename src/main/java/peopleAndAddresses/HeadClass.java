@@ -1,10 +1,13 @@
 package peopleAndAddresses;
 
-import java.sql.SQLException;
+import java.sql.*;
 
 public class HeadClass {
-    final static DAO<Address> addressDao = new DAOAddressClass();
-    final static DAO<Person> personDAO = new DAOPeopleClass();
+    final static DAOAddress addressDao = new DAOAddressClass();
+    final static DAOPeople personDAO = new DAOPeopleClass();
+    final static String URL = "jdbc:mysql://localhost:3306/sergeyjava?serverTimezone=CST&useSSL=false";
+    final static String password = "root";
+    final static String userName = "root";
 
     public static void main(String[] args) {
         try {
@@ -39,18 +42,23 @@ public class HeadClass {
     }
 
     public static void executeSecondTask() { // увеличить возраст на 2 у 2х последних людей и номер дома на 1 у 2х последних адресов
-        try {
-            Address address = addressDao.get(4);
-            address.setHouse(address.getHouse() + 1);
+        try (Connection connection = DriverManager.getConnection(HeadClass.URL, HeadClass.userName, HeadClass.password);
+             Statement statement = connection.createStatement()) {
+            String sqlPeople = "SELECT COUNT(*) FROM PEOPLE";
+            String sqlAddress = "SELECT COUNT(*) FROM ADDRESS";
+            ResultSet rsPeople=statement.executeQuery(sqlPeople);
+            rsPeople.next();
+            int peopleNumOfRows = rsPeople.getInt(1);
+            ResultSet rsAddress = statement.executeQuery(sqlAddress);
+            rsAddress.next();
+            int addressNumOfRows = rsAddress.getInt(1);
+            Address address = addressDao.increaseHouse(addressDao.get(addressNumOfRows - 1), 1);
             addressDao.update(address);
-            address = addressDao.get(5);
-            address.setHouse(address.getHouse() + 1);
+            address = addressDao.increaseHouse(addressDao.get(addressNumOfRows), 1);
             addressDao.update(address);
-            Person person = personDAO.get(4);
-            person.setAge(person.getAge() + 2);
+            Person person = personDAO.increaseAge(personDAO.get(peopleNumOfRows - 1), 2);
             personDAO.update(person);
-            person = personDAO.get(5);
-            person.setAge(person.getAge() + 2);
+            person = personDAO.increaseAge(personDAO.get(peopleNumOfRows), 2);
             personDAO.update(person);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -65,5 +73,4 @@ public class HeadClass {
             e.printStackTrace();
         }
     }
-
 }

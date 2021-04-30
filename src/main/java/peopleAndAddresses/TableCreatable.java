@@ -1,5 +1,5 @@
 package peopleAndAddresses;
 
-public interface TableCreatable extends Accessible {
+public interface TableCreatable {
     void createTable();
 }

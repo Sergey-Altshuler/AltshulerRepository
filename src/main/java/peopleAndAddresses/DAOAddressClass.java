@@ -5,7 +5,7 @@ import java.sql.*;
 public class DAOAddressClass implements DAOAddress {
     @Override
     public void save(Address address) throws SQLException {
-        Connection connection = DriverManager.getConnection(URL, userName, password);
+        Connection connection = DriverManager.getConnection(HeadClass.URL, HeadClass.userName, HeadClass.password);
         String sql = "INSERT INTO ADDRESS(id, street, house) VALUES(?,?,?)";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setInt(1,address.getId());
@@ -18,7 +18,7 @@ public class DAOAddressClass implements DAOAddress {
 
     @Override
     public Address get(int id) throws SQLException {
-        Connection connection = DriverManager.getConnection(URL, userName, password);
+        Connection connection = DriverManager.getConnection(HeadClass.URL, HeadClass.userName, HeadClass.password);
         String sql = "SELECT * FROM ADDRESS WHERE id=" + id;
         Statement statement = connection.createStatement();
         ResultSet rs = statement.executeQuery(sql);
@@ -33,7 +33,7 @@ public class DAOAddressClass implements DAOAddress {
 
     @Override
     public void update(Address address) throws SQLException {
-        Connection connection = DriverManager.getConnection(URL, userName, password);
+        Connection connection = DriverManager.getConnection(HeadClass.URL, HeadClass.userName, HeadClass.password);
         String sql = "UPDATE ADDRESS SET STREET=?, HOUSE=? WHERE id=?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setString(1, address.getStreet());
@@ -47,7 +47,7 @@ public class DAOAddressClass implements DAOAddress {
 
     @Override
     public void delete(int id) throws SQLException {
-        Connection connection = DriverManager.getConnection(URL, userName, password);
+        Connection connection = DriverManager.getConnection(HeadClass.URL, HeadClass.userName, HeadClass.password);
         String sql = "DELETE FROM ADDRESS WHERE id=" + id;
         Statement statement = connection.createStatement();
         statement.executeUpdate(sql);
