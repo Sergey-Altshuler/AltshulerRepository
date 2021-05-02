@@ -31,11 +31,11 @@ public class DatabaseUtilClass {
             addressDao.save(new Address("Kiseleva", 61));
             addressDao.save(new Address("Krasnaya", 12));
             addressDao.save(new Address("Gikalo", 3));
-            personDAO.save(new Person("Sergey", "Altshuler", 27));
-            personDAO.save(new Person("Dmitriy", "Perepechko", 24));
-            personDAO.save(new Person("Egor", "Silvanovich", 20));
-            personDAO.save(new Person("Matvey", "Vetcher", 29));
-            personDAO.save(new Person("Mikhail", "Lapanik", 27));
+            personDAO.save(new Person("Sergey", "Altshuler", 27,2));
+            personDAO.save(new Person("Dmitriy", "Perepechko", 24,2));
+            personDAO.save(new Person("Egor", "Silvanovich", 20,4));
+            personDAO.save(new Person("Matvey", "Vetcher", 29,4));
+            personDAO.save(new Person("Mikhail", "Lapanik", 27,3));
         } catch (SQLException e) {
             e.printStackTrace();
         }

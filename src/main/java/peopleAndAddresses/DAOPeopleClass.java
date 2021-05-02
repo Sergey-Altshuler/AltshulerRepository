@@ -6,10 +6,11 @@ public class DAOPeopleClass implements DAOPeople {
     @Override
     public void save(Person person) throws SQLException {
         try (Connection connection = DriverManagerUtilClass.get();
-             PreparedStatement ps = connection.prepareStatement("INSERT INTO PEOPLE (name, surname, age) VALUES(?,?,?)")) {
+             PreparedStatement ps = connection.prepareStatement("INSERT INTO PEOPLE (name, surname, age, addressNum) VALUES(?,?,?,?)")) {
             ps.setString(1, person.getName());
             ps.setString(2, person.getSurname());
             ps.setInt(3, person.getAge());
+            ps.setInt(4,person.getAddressNum());
             ps.executeUpdate();
         }
     }
@@ -24,18 +25,20 @@ public class DAOPeopleClass implements DAOPeople {
             String name = rs.getString(2);
             String surname = rs.getString(3);
             int age = rs.getInt(4);
-            return new Person(index, name, surname, age);
+            int addressNum = rs.getInt(5);
+            return new Person(index, name, surname, age, addressNum);
         }
     }
 
     @Override
     public void update(Person person) throws SQLException {
         try (Connection connection = DriverManagerUtilClass.get();
-             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE PEOPLE SET NAME=?,SURNAME=?, AGE=? WHERE id=?")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE PEOPLE SET NAME=?,SURNAME=?, AGE=?, ADDRESSNUM=? WHERE id=?")) {
             preparedStatement.setString(1, person.getName());
             preparedStatement.setString(2, person.getSurname());
             preparedStatement.setInt(3, person.getAge());
-            preparedStatement.setInt(4, person.getId());
+            preparedStatement.setInt(4,person.getAddressNum());
+            preparedStatement.setInt(5, person.getId());
             preparedStatement.executeUpdate();
         }
     }
