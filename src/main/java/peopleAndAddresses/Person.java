@@ -14,10 +14,12 @@ public class Person implements Serializable {
     private String name;
     private String surname;
     private int age;
+    private int addressNum;
 
-    public Person(String name, String surname, int age) {
+    public Person(String name, String surname, int age, int addressNum) {
         this.name = name;
         this.surname = surname;
         this.age = age;
+        this.addressNum=addressNum;
     }
 }
