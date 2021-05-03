@@ -6,8 +6,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DatabaseUtilClass {
+
     private final static DAOAddress addressDao = new DAOAddressClass();
     private final static DAOPeople personDAO = new DAOPeopleClass();
+    private final static DAOAddressWithPeople personWithAddressDAO = new DAOAddressWithPeopleClass();
 
     public void initialize() {
         try {
@@ -24,6 +26,11 @@ public class DatabaseUtilClass {
         tableCreatable.createTable();
     }
 
+    public void createThirdTable() {
+      TableCreatable tableCreatable = new PeopleAddressConnectionCreator();
+      tableCreatable.createTable();
+    }
+
     public void addFiveAddressesAndPeople() {
         try {
             addressDao.save(new Address("Skriganova", 9));
@@ -36,6 +43,22 @@ public class DatabaseUtilClass {
             personDAO.save(new Person("Egor", "Silvanovich", 20));
             personDAO.save(new Person("Matvey", "Vetcher", 29));
             personDAO.save(new Person("Mikhail", "Lapanik", 27));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addDataToThirdTable() {
+        try {
+            personWithAddressDAO.save(new PersonAddressConnector( 1, 3));
+            personWithAddressDAO.save(new PersonAddressConnector( 1, 4));
+            personWithAddressDAO.save(new PersonAddressConnector( 2, 1));
+            personWithAddressDAO.save(new PersonAddressConnector( 2, 5));
+            personWithAddressDAO.save(new PersonAddressConnector( 3, 3));
+            personWithAddressDAO.save(new PersonAddressConnector( 4, 3));
+            personWithAddressDAO.save(new PersonAddressConnector( 5, 3));
+            personWithAddressDAO.save(new PersonAddressConnector( 5, 4));
         } catch (SQLException e) {
             e.printStackTrace();
         }
