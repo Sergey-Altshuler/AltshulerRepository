@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DatabaseUtilClass {
+
     final static DAOAddress addressDao = new DAOAddressClass();
     final static DAOPeople personDAO = new DAOPeopleClass();
     final static DAOAddressWithPeople personWithAddressDAO = new DAOAddressWithPeopleClass();
