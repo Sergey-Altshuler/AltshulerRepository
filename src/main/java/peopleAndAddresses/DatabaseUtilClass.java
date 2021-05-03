@@ -7,9 +7,9 @@ import java.sql.Statement;
 
 public class DatabaseUtilClass {
 
-    final static DAOAddress addressDao = new DAOAddressClass();
-    final static DAOPeople personDAO = new DAOPeopleClass();
-    final static DAOAddressWithPeople personWithAddressDAO = new DAOAddressWithPeopleClass();
+    private final static DAOAddress addressDao = new DAOAddressClass();
+    private final static DAOPeople personDAO = new DAOPeopleClass();
+    private final static DAOAddressWithPeople personWithAddressDAO = new DAOAddressWithPeopleClass();
 
     public void initialize() {
         try {
