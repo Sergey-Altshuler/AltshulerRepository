@@ -1,38 +1,63 @@
 package projectPackage.dao;
 
 import projectPackage.model.Person;
-import projectPackage.util.DatabaseStatementsUtilClass;
-import projectPackage.util.DriverManagerUtilClass;
+import projectPackage.util.HibernateUtil;
 
-import java.sql.*;
+import javax.persistence.EntityManager;
+import java.util.List;
 
 public class DAOPeopleClass implements DAOPeople {
-    @Override
-    public void save(Person person) throws SQLException {
-        DatabaseStatementsUtilClass.executePreparedStatement("INSERT INTO PEOPLE(name,surname,age) VALUES(?,?,?)", person);
+    private static final EntityManager em;
+
+    static {
+        em = HibernateUtil.getEntityManager();
     }
 
     @Override
-    public Person get(int id) throws SQLException {
-        try (Connection connection = DriverManagerUtilClass.get();
-             Statement statement = connection.createStatement()) {
-            ResultSet rs = statement.executeQuery("SELECT * FROM PEOPLE WHERE id=" + id);
-            rs.next();
-            int index = rs.getInt(1);
-            String name = rs.getString(2);
-            String surname = rs.getString(3);
-            int age = rs.getInt(4);
-            return new Person(index, name, surname, age);
+    public void save(Person person) {
+        em.getTransaction().begin();
+        em.persist(person);
+        em.getTransaction().commit();
+    }
+
+    @Override
+    public Person get(int id) {
+        Person person = em.find(Person.class, id);
+        em.detach(person);
+        return person;
+    }
+
+    @Override
+    public void update(Person person) {
+        Person updated = get(person.getId());
+        em.detach(updated);
+        updated.setAge(person.getAge());
+        updated.setSurname(person.getSurname());
+        updated.setName(person.getName());
+        em.getTransaction().begin();
+        em.merge(updated);
+        em.getTransaction().commit();
+    }
+
+    @Override
+    public void delete(int id) {
+        em.getTransaction().begin();
+        Person person = em.find(Person.class, id);
+        if (person != null) {
+            em.remove(person);
         }
+        em.getTransaction().commit();
     }
 
-    @Override
-    public void update(Person person) throws SQLException {
-        DatabaseStatementsUtilClass.executePreparedStatement("UPDATE PEOPLE SET NAME=?, SURNAME=?, AGE=? WHERE id=?", person);
+    public void saveAll(List<Person> people) {
+        em.getTransaction().begin();
+        for (Person person : people) {
+            em.persist(person);
+        }
+        em.getTransaction().commit();
     }
 
-    @Override
-    public void delete(int id) throws SQLException {
-        DatabaseStatementsUtilClass.executeStatement("DELETE FROM PEOPLE WHERE id=" + id);
+    public List<Person> getAll() {
+        return em.createNamedQuery("Person.getAll", Person.class).getResultList();
     }
 }

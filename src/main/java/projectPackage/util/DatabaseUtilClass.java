@@ -1,11 +1,15 @@
 package projectPackage.util;
 
+import projectPackage.generator.AddressGenerator;
+import projectPackage.generator.PeopleGenerator;
 import projectPackage.dao.DAOAddress;
 import projectPackage.dao.DAOAddressClass;
 import projectPackage.dao.DAOPeople;
 import projectPackage.dao.DAOPeopleClass;
-import projectPackage.model.*;
-import java.sql.*;
+import projectPackage.model.Address;
+import projectPackage.model.Person;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,105 +17,49 @@ public class DatabaseUtilClass {
     private final static DAOAddress addressDao = new DAOAddressClass();
     private final static DAOPeople personDAO = new DAOPeopleClass();
 
-    public void initialize() {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void createTwoTables() {
-        try {
-            TableCreatable tableCreatable = new AddressTableCreator();
-            tableCreatable.createTable();
-            tableCreatable = new PeopleTableCreator();
-            tableCreatable.createTable();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void addFiveAddressesAndPeople() {
-        List<Person> personList = new ArrayList<>();
+    public void addAddresses(int num) throws SQLException {
         List<Address> addressList = new ArrayList<>();
-        personList.add(Person.builder().surname("Altshuler").name("Sergey").age(27).build());
-        personList.add(Person.builder().surname("Perpechko").name("Dmitry").age(24).build());
-        personList.add(Person.builder().surname("Silvanovich").name("Egor").age(20).build());
-        personList.add(Person.builder().surname("Vetcher").name("Matvey").age(29).build());
-        personList.add(Person.builder().surname("Lapanik").name("Mikhail").age(27).build());
-        personDAO.saveAll(personList);
-        addressList.add(Address.builder().street("Skriganova").house(9).build());
-        addressList.add(Address.builder().street("Skriganova").house(14).build());
-        addressList.add(Address.builder().street("Kiseleva").house(61).build());
-        addressList.add(Address.builder().street("Krasnaya").house(12).build());
-        addressList.add(Address.builder().street("Gikalo").house(3).build());
+        for (int i = 0; i < num; i++) {
+            addressList.add(AddressGenerator.generateAddress());
+        }
         addressDao.saveAll(addressList);
     }
 
-    public void increaseAgeOfTwoLastPeople(int numOfYears) {
-        try (Connection connection = DriverManagerUtilClass.get();
-             Statement statement = connection.createStatement()) {
-            ResultSet rsPeople = statement.executeQuery("SELECT MAX(id) FROM PEOPLE");
-            rsPeople.next();
-            int peopleNumOfRows = rsPeople.getInt(1);
-            Person person = personDAO.increaseAge(personDAO.get(peopleNumOfRows - 1), numOfYears);
+    public void addPeople(int num) throws SQLException {
+        List<Person> personList = new ArrayList<>();
+        for (int i = 0; i < num; i++) {
+            personList.add(PeopleGenerator.generatePerson());
+        }
+        personDAO.saveAll(personList);
+    }
+
+
+    public void increaseAgeOfLastPeople(int countOfPeople, int numOfYears) throws SQLException {
+        List<Person> personList = personDAO.getAll();
+        for (int i = 0; i < countOfPeople; i++) {
+            Person person = personDAO.increaseAge(personList.get(personList.size() - (i + 1)), numOfYears);
             personDAO.update(person);
-            person = personDAO.increaseAge(personDAO.get(peopleNumOfRows), numOfYears);
-            personDAO.update(person);
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 
-    public void increaseHouseOfTwoLastAddresses(int number) {
-        try (Connection connection = DriverManagerUtilClass.get();
-             Statement statement = connection.createStatement()) {
-            ResultSet rsAddress = statement.executeQuery("SELECT MAX(id) FROM ADDRESS");
-            rsAddress.next();
-            int addressNumOfRows = rsAddress.getInt(1);
-            Address address = addressDao.increaseHouse(addressDao.get(addressNumOfRows - 1), number);
+    public void increaseHouseOfLastAddresses(int countOfAddresses, int numOfHouses) throws SQLException {
+        List<Address> addressList = addressDao.getAll();
+        for (int i = 0; i < countOfAddresses; i++) {
+            Address address = addressDao.increaseHouse(addressList.get(addressList.size() - (i + 1)), numOfHouses);
             addressDao.update(address);
-            address = addressDao.increaseHouse(addressDao.get(addressNumOfRows), number);
-            addressDao.update(address);
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 
-    public void deleteFirstAddress() {
-        try (Connection connection = DriverManagerUtilClass.get();
-             Statement statement = connection.createStatement()) {
-            ResultSet rsAddress = statement.executeQuery("SELECT MIN(id) FROM ADDRESS");
-            rsAddress.next();
-            int addressMin = rsAddress.getInt(1);
-            addressDao.delete(addressMin);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void deleteAddress(int num) throws SQLException {
+        List<Address> addressList = addressDao.getAll();
+        addressDao.delete(addressList.get(num - 1).getId());
     }
 
-    public void deleteFirstPerson() {
-        try (Connection connection = DriverManagerUtilClass.get();
-             Statement statement = connection.createStatement()) {
-            ResultSet rsPeople = statement.executeQuery("SELECT MIN(id) FROM PEOPLE");
-            rsPeople.next();
-            int peopleMin = rsPeople.getInt(1);
-            personDAO.delete(peopleMin);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void deletePerson(int num) throws SQLException {
+        List<Person> personList = personDAO.getAll();
+        personDAO.delete(personList.get(num - 1).getId());
     }
-
-    public void useCallableStatement(Address address) {
-        try (Connection connection = DriverManagerUtilClass.get();
-             CallableStatement cs = connection.prepareCall("{call updateAddress(?,?,?)}")) {
-            cs.setInt(1, address.getId());
-            cs.setString(2, address.getStreet());
-            cs.setInt(3, address.getHouse());
-            cs.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void finishWorkWithEntities(){
+        HibernateUtil.close();
     }
 }

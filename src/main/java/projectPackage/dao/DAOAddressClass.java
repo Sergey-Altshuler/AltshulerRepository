@@ -1,37 +1,63 @@
 package projectPackage.dao;
 
 import projectPackage.model.Address;
-import projectPackage.util.DatabaseStatementsUtilClass;
-import projectPackage.util.DriverManagerUtilClass;
+import projectPackage.util.HibernateUtil;
 
-import java.sql.*;
+import javax.persistence.EntityManager;
+import java.util.List;
 
 public class DAOAddressClass implements DAOAddress {
-    @Override
-    public void save(Address address) throws SQLException {
-        DatabaseStatementsUtilClass.executePreparedStatement("INSERT INTO ADDRESS(street, house) VALUES(?,?)", address);
+    private static final EntityManager em;
+
+    static {
+        em = HibernateUtil.getEntityManager();
     }
 
     @Override
-    public Address get(int id) throws SQLException {
-        try (Connection connection = DriverManagerUtilClass.get();
-             Statement statement = connection.createStatement()) {
-            ResultSet rs = statement.executeQuery("SELECT * FROM ADDRESS WHERE id=" + id);
-            rs.next();
-            int index = rs.getInt(1);
-            String street = rs.getString(2);
-            int house = rs.getInt(3);
-            return new Address(index, street, house);
+    public void save(Address address) {
+        em.getTransaction().begin();
+        em.persist(address);
+        em.getTransaction().commit();
+
+    }
+
+    @Override
+    public Address get(int id) {
+        Address address = em.find(Address.class, id);
+        em.detach(address);
+        return address;
+    }
+
+    @Override
+    public void update(Address address) {
+        Address updated = get(address.getId());
+        em.detach(updated);
+        updated.setStreet(address.getStreet());
+        updated.setHouse(address.getHouse());
+        em.getTransaction().begin();
+        em.merge(updated);
+        em.getTransaction().commit();
+    }
+
+    @Override
+    public void delete(int id) {
+        em.getTransaction().begin();
+        Address address = em.find(Address.class, id);
+        if (address != null) {
+            em.remove(address);
         }
+        em.getTransaction().commit();
     }
 
-    @Override
-    public void update(Address address) throws SQLException {
-        DatabaseStatementsUtilClass.executePreparedStatement("UPDATE ADDRESS SET STREET=?, HOUSE=? WHERE id=?", address);
+    public void saveAll(List<Address> addresses) {
+        em.getTransaction().begin();
+        for (Address address : addresses) {
+            em.persist(address);
+        }
+        em.getTransaction().commit();
     }
 
-    @Override
-    public void delete(int id) throws SQLException {
-        DatabaseStatementsUtilClass.executeStatement("DELETE FROM ADDRESS WHERE id=" + id);
+    public List<Address> getAll() {
+        return em.createNamedQuery("Address.getAll", Address.class).getResultList();
     }
 }
