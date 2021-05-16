@@ -1,5 +1,0 @@
-create
-    definer = root@localhost procedure UpdateAddress(IN address_id int, IN street_name varchar(25), IN house_num int)
-begin
-UPDATE address SET street=street_name, house=house_num WHERE id=address_id;
-end;
