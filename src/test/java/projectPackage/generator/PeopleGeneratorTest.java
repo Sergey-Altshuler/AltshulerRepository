@@ -1,7 +1,6 @@
-package projectPackage.generatorTest;
+package projectPackage.generator;
 
 import org.junit.Test;
-import projectPackage.generator.PeopleGenerator;
 
 import static org.junit.Assert.assertNotNull;
 

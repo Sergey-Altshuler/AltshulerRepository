@@ -8,11 +8,11 @@ public interface DAO<T> {
 
     void saveAll(List<T> t) throws SQLException;
 
-    T get(int id) throws SQLException;
+    T get(Class<T> generic, int id) throws SQLException;
 
-    void update(T t) throws SQLException;
+    void update( T t) throws SQLException;
 
-    void delete(int id) throws SQLException;
+    void delete(Class<T> genetic,int id) throws SQLException;
 
-    List<T> getAll() throws SQLException;
+    List<T> getAll(Class <T> generic) throws SQLException;
 }

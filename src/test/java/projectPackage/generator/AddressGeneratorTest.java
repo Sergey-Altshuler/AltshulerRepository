@@ -1,13 +1,12 @@
-package projectPackage.generatorTest;
+package projectPackage.generator;
 
 import org.junit.Test;
-import projectPackage.generator.AddressGenerator;
 
 import static org.junit.Assert.assertNotNull;
 
 public class AddressGeneratorTest {
     @Test
-    public void generateAddress(){
+    public void generateAddress() {
         assertNotNull(AddressGenerator.generateAddress());
     }
 }
