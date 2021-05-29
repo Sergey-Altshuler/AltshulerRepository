@@ -3,10 +3,9 @@ package embeddedPackage.pojos;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -14,13 +13,16 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Inheritance (strategy = InheritanceType.JOINED)
+@SuperBuilder
 public class Task implements Serializable {
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.TABLE)
+    int id;
     @Column
-    private String name;
+    String name;
     @Column
-    private String description;
+    String description;
 
     @Override
     public boolean equals(Object o) {
@@ -33,5 +35,14 @@ public class Task implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }
