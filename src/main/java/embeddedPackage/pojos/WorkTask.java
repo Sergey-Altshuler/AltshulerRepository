@@ -1,10 +1,13 @@
 package embeddedPackage.pojos;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Objects;
@@ -13,9 +16,9 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@DiscriminatorValue("WorkTask")
+@SuperBuilder
 public class WorkTask extends Task{
-    @Id
-    private int id;
     @Column
     private int cost;
 
@@ -31,5 +34,15 @@ public class WorkTask extends Task{
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), id);
+    }
+
+    @Override
+    public String toString() {
+        return "WorkTask{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", cost=" + cost +
+                '}';
     }
 }
