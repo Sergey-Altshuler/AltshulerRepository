@@ -7,10 +7,7 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -18,14 +15,12 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@DiscriminatorValue("HomeTask")
 @SuperBuilder
+@PrimaryKeyJoinColumn(name = "person_id")
 public class HomeTask extends Task{
     @CreationTimestamp
-    @Column (insertable = false)
     private LocalDateTime startDate;
     @UpdateTimestamp
-    @Column(insertable = false)
     private LocalDateTime endDate;
     @Embedded
     private Address address;

@@ -1,7 +1,6 @@
 package embeddedPackage.pojos;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -9,15 +8,15 @@ import lombok.experimental.SuperBuilder;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.PrimaryKeyJoinColumn;
 import java.util.Objects;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@DiscriminatorValue("WorkTask")
 @SuperBuilder
+@PrimaryKeyJoinColumn(name = "person_id")
 public class WorkTask extends Task{
     @Column
     private int cost;

@@ -1,7 +1,6 @@
 package embeddedPackage.pojos;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -14,9 +13,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Inheritance (strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn (name="TaskType", discriminatorType = DiscriminatorType.STRING)
-@DiscriminatorValue("Task")
+@Inheritance (strategy = InheritanceType.JOINED)
 @SuperBuilder
 public class Task implements Serializable {
     @Id
