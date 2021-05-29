@@ -3,13 +3,12 @@ package embeddedPackage.pojos;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -17,13 +16,11 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@SuperBuilder
 public class HomeTask extends Task{
-    @Id
-    private int id;
     @CreationTimestamp
     private LocalDateTime startDate;
     @UpdateTimestamp
-    @Column(insertable = false)
     private LocalDateTime endDate;
     @Embedded
     private Address address;
@@ -40,5 +37,17 @@ public class HomeTask extends Task{
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), id);
+    }
+
+    @Override
+    public String toString() {
+        return "HomeTask{" +
+                "startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", address=" + address +
+                ", id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }
