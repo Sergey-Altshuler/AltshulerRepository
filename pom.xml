@@ -38,16 +38,13 @@
       <artifactId>mysql-connector-java</artifactId>
       <version>8.0.24</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.keycloak/keycloak-model-jpa -->
     <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-entitymanager</artifactId>
-      <version>${hibernate.version}</version>
+      <groupId>org.keycloak</groupId>
+      <artifactId>keycloak-model-jpa</artifactId>
+      <version>13.0.1</version>
     </dependency>
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-core</artifactId>
-      <version>5.4.31.Final</version>
-    </dependency>
+
   </dependencies>
 
   <build>
