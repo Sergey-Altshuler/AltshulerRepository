@@ -24,8 +24,6 @@ public class Coach implements Serializable {
     @Column
     private String name;
     @Column
-    private int age;
-    @Column
     private int salary;
 
     @ManyToOne (cascade = CascadeType.PERSIST)
@@ -40,11 +38,11 @@ public class Coach implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Coach coach = (Coach) o;
-        return id == coach.id && age == coach.age && salary == coach.salary && Objects.equals(name, coach.name);
+        return id == coach.id && salary == coach.salary && Objects.equals(name, coach.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, age, salary);
+        return Objects.hash(id, name, salary);
     }
 }
