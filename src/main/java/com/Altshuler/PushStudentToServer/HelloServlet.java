@@ -1,24 +1,33 @@
 package com.Altshuler.PushStudentToServer;
 
+import com.Altshuler.model.Student;
+import com.Altshuler.util.ConnectorToDB;
+import com.Altshuler.util.StudentsGenerator;
+
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 
-@WebServlet(name = "helloServlet", value = "/hello-servlet")
+@WebServlet(name = "Students", value = "/Students")
 public class HelloServlet extends HttpServlet {
-    private String message;
+    private static List<Student> studentList = new ArrayList<>();
 
     public void init() {
-        message = "Hello World!";
+        List<Student> created = StudentsGenerator.generateStudents(10);
+        ConnectorToDB.saveList(created);
+        studentList = ConnectorToDB.getStudents();
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
 
-        // Hello
         PrintWriter out = response.getWriter();
         out.println("<html><body>");
-        out.println("<h1>" + message + "</h1>");
+        for (Student student: studentList) {
+            out.println("<h1>" + student + "</h1>");
+        }
         out.println("</body></html>");
     }
 
