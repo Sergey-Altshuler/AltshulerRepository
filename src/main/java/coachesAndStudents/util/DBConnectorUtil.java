@@ -4,13 +4,16 @@ import org.hibernate.Session;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
 public class DBConnectorUtil {
     private static final Session session = SessionUtil.getSession();
     private static Connection connection;
+    private static final Map<Integer, String> levelsOfIsolationMap = new HashMap<>();
 
     static {
         try {
@@ -18,6 +21,10 @@ public class DBConnectorUtil {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        levelsOfIsolationMap.put(1, "READ_UNCOMMITTED");
+        levelsOfIsolationMap.put(2, "READ_COMMITTED");
+        levelsOfIsolationMap.put(4, "REPEATABLE_READ");
+        levelsOfIsolationMap.put(8, "SERIALIZABLE");
     }
 
     private static void saveList(List<?> saved) {
@@ -37,7 +44,6 @@ public class DBConnectorUtil {
     }
 
     public static void updateData(int levelOfIsolation) {
-       // GeneratorEntities.clearAll();
         GeneratorEntities.generate(100);
         ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
         threadPoolExecutor.execute(() -> {
@@ -52,10 +58,12 @@ public class DBConnectorUtil {
                 throwables.printStackTrace();
             }
             long end = System.currentTimeMillis();
-            System.out.println("Level of isolation: " + getLevelOfIsolation(levelOfIsolation)+ " - " + (end - start) + " milliseconds");
+            System.out.println("Level of isolation: " + levelsOfIsolationMap.get(levelOfIsolation) + " - " + (end - start) + " milliseconds");
         });
         threadPoolExecutor.shutdown();
-    };
+    }
+
+    ;
 
     private static void updateList(List<?> updated, int levelOfIsolation) throws SQLException {
         connection.setTransactionIsolation(levelOfIsolation);
@@ -66,15 +74,7 @@ public class DBConnectorUtil {
         }
         session.getTransaction().commit();
     }
-    private static String getLevelOfIsolation(int identifier){
-        switch (identifier){
-            case 1: return "READ_UNCOMMITTED";
-            case 2: return "READ_COMMITTED";
-            case 4: return  "REPEATABLE_READ";
-            case 8: return "SERIALIZABLE";
-            default: return "NONE";
-        }
-    }
+
     public static void finish() throws SQLException {
         connection.close();
     }
