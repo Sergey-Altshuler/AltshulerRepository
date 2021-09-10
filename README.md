@@ -1,3 +1,2 @@
 # AltshulerRepository
-This owner of the repository is IT-student Altshuler Sergey
-Hello git!
+This repository includes my Java works created when I studied in the IT-Academy. I trained to use Maven, Hibernate, JUnit. 
