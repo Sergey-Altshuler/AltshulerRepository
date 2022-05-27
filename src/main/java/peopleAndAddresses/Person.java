@@ -1,12 +1,11 @@
 package peopleAndAddresses;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-@Builder
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,5 +15,9 @@ public class Person implements Serializable {
     private String surname;
     private int age;
 
-
+    public Person(String name, String surname, int age) {
+        this.name = name;
+        this.surname = surname;
+        this.age = age;
+    }
 }
